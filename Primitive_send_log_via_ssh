@@ -1,0 +1,13 @@
+## Primitive method send log file via ssh protoccol
+
+#!/bin/sh
+
+echo "echo password" > /dir/1
+
+chmod 777 /dir/1
+
+export SSH_ASKPASS="/dir/1"
+export DISPLAY=YOURDOINGITWRONG
+setsid scp -P 22 /file.log user@192.168.0.2:/dir
+
+echo "OK $(date)"

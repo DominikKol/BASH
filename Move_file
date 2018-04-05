@@ -1,0 +1,26 @@
+###Move all files from directory to archive directory (and create new dir in archive) if > 900 files in directory => (start cron only 1 hour)
+
+#!/bin/bash
+command="/bin/ls"
+command2="/usr/bin/wc -l"
+command3="/bin/mv -vf"
+command4="/bin/mkdir"
+
+rootdir="startdir/dir"
+archdir="end/archivedir"
+ls=$(`echo "ls $rootdir"`)
+
+for i in ${ls[@]} ; do
+        if [ -d $rootdir/$i/box/ ]; then
+                nextdir=$($command $rootdir/$i/box/ | $command2)
+                for j in ${nextdir[@]} ; do
+                        if [[ "$j" -gt 900 ]]; then
+                                echo $rootdir/$i " count: " $j
+                                echo $archdir/$i " count: " $j
+                                createdir=$($command4 $archdir/$i $archdir/$i/box)
+                                move=$($command3 $rootdir/$i/box/* $archdir/$i/box/)
+                                createdir2=$($command4 $rootdir/$i/box)
+                        fi
+                done
+        fi
+done

@@ -1,0 +1,53 @@
+### SOURCE FILE EXAMPLE ###
+
+password=hashpassword
+emailattachment=false
+recording=false
+noanswerforward_org=username
+emailnotification=false
+rtprelay=default
+allowjoin=true
+dtmfcommand=true
+index=1
+canjoin=true
+ringertime=5
+userplugin=user
+messageforward=
+admin=false
+defaultpickup=
+email=
+personalivr=
+language=en
+greetingtype=3
+noanswerforward=username => (is numeric value eg. 1000000)
+phoneforward=
+maxsessioncount=-1
+name=Example
+
+############################
+
+#!/bin/sh
+command="/bin/grep"
+command1="/bin/awk"
+command2="/bin/sed"
+
+z=$($command  -iRl "noanswerforward=" /dir/example.file | $command -iR "noanswerforward=" /dir/example.file)
+count=1
+for i in ${z[@]} ; do
+        y=$(echo $i | $command1 '{ split($0,a,"="); print a[2]; }')
+        if [[ "$y" =~ ^(username2|username1)$ ]]; then ## negation two users
+
+                x=$(echo $i | $command1 '{ split($0,b,":"); print b[1]; }')
+                string="username"$count
+
+                if [[ $count -eq 100 ]]; then
+                        break
+                fi
+                echo $y $x $string
+                replace=$($command2 -i "s/${y}/${string}/g" $x;)
+        fi
+        count=$((count+1))
+done
+
+
+### This script replace data username in 100 files eg. 1000000 > 1000099
